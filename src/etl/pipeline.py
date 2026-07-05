@@ -13,14 +13,22 @@ def clean_rows(rows):
     cleaned = []
     for row in rows:
         amount = row.get("amount", "")
-        logging.info(f"total amount would be {amount}")
         if amount in (None, ""):
             logging.warning(f"Skipping row with missing amount: {row}")
             continue
-        row["amount"] = float(amount)
+        amount_val = float(amount)
+        if amount_val < 0:
+            logging.warning(f"Skipping row with negative amount: {row}")
+            continue
+        row["amount"] = amount_val
         cleaned.append(row)
     return cleaned
 
 
 def total_revenue(rows):
     return sum(row["amount"] for row in rows)
+
+
+if __name__ == "__main__":
+    rows = clean_rows(load_sales("data/raw/sales.csv"))
+    logging.info(f"Total revenue: {total_revenue(rows)}")

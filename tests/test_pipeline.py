@@ -7,3 +7,9 @@ def test_clean_rows_skips_missing_amount():
 
 def test_total_revenue_sums_correctly():
     assert total_revenue([{"amount": 50.0}, {"amount": 25.5}]) == 75.5
+
+def test_clean_rows_skips_negative_amount():
+    rows = [{"order_id": "1", "amount": "-50"}, {"order_id": "2", "amount": "100"}]
+    result = clean_rows(rows)
+    assert len(result) == 1
+    assert result[0]["amount"] == 100.0
