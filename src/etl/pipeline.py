@@ -13,7 +13,7 @@ def clean_rows(rows):
     cleaned = []
     for row in rows:
         amount = row.get("amount", "")
-        logging.info(f"total amount would be ",{amount})
+        logging.info(f"total amount would be {amount}")
         if amount in (None, ""):
             logging.warning(f"Skipping row with missing amount: {row}")
             continue
