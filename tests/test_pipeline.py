@@ -13,3 +13,10 @@ def test_clean_rows_skips_negative_amount():
     result = clean_rows(rows)
     assert len(result) == 1
     assert result[0]["amount"] == 100.0
+
+
+def test_revenue_summary_calculates_average():
+    from src.etl.report import revenue_summary
+    result = revenue_summary("data/raw/sales.csv")
+    assert result["row_count"] == 2
+    assert result["average_order_value"] == result["total_revenue"] / 2
