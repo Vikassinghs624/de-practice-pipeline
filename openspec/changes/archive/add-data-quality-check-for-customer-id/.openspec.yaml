@@ -1,0 +1,4 @@
+change:
+  name: add-data-quality-check-for-customer-id
+  title: Add customer_id data quality validation before Snowflake load
+  status: proposed

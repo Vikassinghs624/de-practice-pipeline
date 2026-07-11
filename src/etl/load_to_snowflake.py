@@ -1,7 +1,7 @@
 import os
 import snowflake.connector
 from dotenv import load_dotenv
-from src.etl.pipeline import load_sales, clean_rows
+from src.etl.pipeline import load_sales, clean_rows, validate_customer_id_quality  # ← add this import
 
 load_dotenv()
 
@@ -15,8 +15,10 @@ conn = snowflake.connector.connect(
 )
 
 rows = clean_rows(load_sales("data/raw/sales.csv"))
+validate_customer_id_quality(rows)   # ← add this, BEFORE truncate/insert — will raise and stop the script if >5% missing
+
 cur = conn.cursor()
-cur.execute("TRUNCATE TABLE SALES")  
+cur.execute("TRUNCATE TABLE SALES")
 for row in rows:
     cur.execute(
         "INSERT INTO SALES (order_id, customer_id, amount) VALUES (%s, %s, %s)",
